@@ -2,17 +2,17 @@ In the ddns_asp function of jhttpd, several parameters are obtained
 
 ![img](./picture/pic1.png) 
 
-![img](./picture\pic2.png) 
+![img](./picture/pic2.png) 
 
 If opt=add, then the following arguments will be concatenated to the stack variable via the sprintf function
 
-![img](./picture\pic3.png) 
+![img](./picture/pic3.png) 
 
 Because the parameter length is not verified, the stack overflow vulnerability will be caused by the long parameter during splicing
 
 Or use FirmAE to simulate directly, connect to the shell, and run jhttpd in it
 
-![img](./picture\pic4.png) 
+![img](./picture/pic4.png) 
 
 and then send the payload
 
@@ -24,4 +24,4 @@ print(response.text)
 
 A segfault was found in jhttpd, which proves that the vulnerability exists
 
-![img](./picture\pic5.png) 
+![img](./picture/pic5.png) 
